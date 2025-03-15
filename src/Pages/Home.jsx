@@ -24,7 +24,7 @@ const Home = () => {
                 facere maiores illum maxime beatae sint.
               </p>
               <Link className="btn btn-warning" to={"/dashboard"}>
-                Startb to explore
+                Start to explore
               </Link>
             </div>
             <div className="col-lg-6">

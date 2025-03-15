@@ -13,17 +13,17 @@ const ViewProject = () => {
         <div className="p-2 border rounded d-flex justify-content-between">
           <h2>Title</h2>
           <div className="d-flex">
-            <div className="btn">
+            <div className="">
               <EditProject />
             </div>
             <div className="btn">
-              <a href="">
-                <i class="fa-brands fa-gitlab"></i>
+              <a target="blank" href="">
+                <i className="fa-brands fa-gitlab"></i>
               </a>
             </div>
             <div>
               <button className="btn text-danger">
-                <i class="fa-solid fa-trash"></i>
+                <i className="fa-solid fa-trash"></i>
               </button>
             </div>
           </div>
