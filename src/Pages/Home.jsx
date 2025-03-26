@@ -1,10 +1,27 @@
-import React from "react";
-import { Link } from "react-router-dom";
+import React, { useEffect, useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
 import landingImage from "../assets/landingIMG.jpg";
 import ProjectCard from "../Components/ProjectCard";
 import Card from "react-bootstrap/Card";
 
 const Home = () => {
+  const [isLoggedin,setIsLoggedin]=useState(false)
+  const navigate=useNavigate()
+
+  useEffect(
+    ()=>{
+      if(sessionStorage.getItem('token')){
+        setIsLoggedin(true)
+    }else{
+      setIsLoggedin(false)
+
+    }},[isLoggedin]
+  )
+ const onProjectClick=()=>{
+  isLoggedin?navigate('/projects'):alert('please login to see projects')
+ }
+
+
   return (
     <>
       <div
@@ -23,9 +40,11 @@ const Home = () => {
                 porro laboriosam. Iste aspernatur possimus ipsa dolores ducimus
                 facere maiores illum maxime beatae sint.
               </p>
-              <Link className="btn btn-warning" to={"/dashboard"}>
+              {isLoggedin?<Link className="btn btn-warning" to={"/dashboard"}>
                 Start to explore
-              </Link>
+              </Link>:<Link className="btn btn-danger" to={"/dashboard"}>
+                Login/Register
+              </Link>}
             </div>
             <div className="col-lg-6">
               <img className="img-fluid" src={landingImage} alt="" />
@@ -42,7 +61,7 @@ const Home = () => {
             </div>
           </div>
         </marquee>
-        <button className="btn btn-link mt-5">
+        <button onClick={onProjectClick} className="btn btn-link mt-5">
           CLICK HERE TO VIEW MORE PROJECTS..
         </button>
       </div>

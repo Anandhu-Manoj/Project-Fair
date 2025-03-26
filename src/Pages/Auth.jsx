@@ -3,43 +3,60 @@ import { Col, Row } from "react-bootstrap";
 import Login from "../assets/Login.svg";
 import FloatingLabel from "react-bootstrap/FloatingLabel";
 import Form from "react-bootstrap/Form";
-import { Link } from "react-router-dom";
-import { registeruser } from "../../services/allApis";
-
-
-
+import { Link, useNavigate } from "react-router-dom";
+import { loginUser, registeruser } from "../../services/allApis";
 
 //de structuring to pass the prompt
 
-
 const Auth = ({ fromRegisterPage }) => {
-const [data,setData]=useState({username:"",password:"",email:""})
+  const navigate = useNavigate();
+  const [data, setData] = useState({ username: "", password: "", email: "" });
 
-  const btnClick=async(e)=>{
-    e.preventDefault()
-    if(fromRegisterPage){
+  const btnClick = async (e) => {
+    e.preventDefault();
+    if (fromRegisterPage) {
+      try {
+        const { username, password, email } = data;
+        if (username && password && email) {
+          let responseData = await registeruser(data);
 
-
-      try{
-
-        const {username , password , email}=data
-        if(username && password && email){
-          let responseData=  await registeruser(data)
-          console.log(responseData);
-          
-        }else{
-          alert("sdlvkj")
+          if (responseData.status == 201) {
+            alert("user succesfully created");
+          } else {
+            if (responseData.status == 409) {
+              alert("user already exist please login");
+              navigate('/login')
+            }
+          }
+        } else {
+          alert("please fill the form");
         }
-      }catch(err){
+      } catch (err) {
         console.log(err);
-        
       }
+    } else {
+      if (data.email && data.password) {
+        const payload = {
+          email: data.email,
+          password: data.password,
+        };
+        let apiResponse = await loginUser(payload);
+        if (apiResponse?.status == 200) {
+          console.log(apiResponse);
 
-     
+          sessionStorage.setItem("user", apiResponse?.data?.user.username);
+          sessionStorage.setItem("token", apiResponse?.data?.token);
+          navigate("/dashboard");
+        } else if (apiResponse?.status == 401) {
+          alert(apiResponse?.message);
+        } else {
+          alert("internal server error contact admin");
+        }
+      } else {
+        alert("please fill the form completely");
+      }
     }
-
-
-  }
+  };
   return (
     <div
       style={{ minHeight: "100vh" }}
@@ -63,7 +80,13 @@ const [data,setData]=useState({username:"",password:"",email:""})
                   label="Username"
                   className="mb-3"
                 >
-                  <Form.Control onChange={(e)=>setData({...data,username:e.target.value})} type="text" placeholder="Username" />
+                  <Form.Control
+                    onChange={(e) =>
+                      setData({ ...data, username: e.target.value })
+                    }
+                    type="text"
+                    placeholder="Username"
+                  />
                 </FloatingLabel>
               ) : (
                 ""
@@ -73,10 +96,20 @@ const [data,setData]=useState({username:"",password:"",email:""})
                 label="Email address"
                 className="mb-3"
               >
-                <Form.Control  onChange={(e)=>setData({...data,email:e.target.value})} type="email" placeholder="name@example.com" />
+                <Form.Control
+                  onChange={(e) => setData({ ...data, email: e.target.value })}
+                  type="email"
+                  placeholder="name@example.com"
+                />
               </FloatingLabel>
-              <FloatingLabel  controlId="floatingPassword" label="Password">
-                <Form.Control  onChange={(e)=>setData({...data,password:e.target.value})} type="password" placeholder="Password" />
+              <FloatingLabel controlId="floatingPassword" label="Password">
+                <Form.Control
+                  onChange={(e) =>
+                    setData({ ...data, password: e.target.value })
+                  }
+                  type="password"
+                  placeholder="Password"
+                />
               </FloatingLabel>
 
               <button onClick={btnClick} className="mt-2 btn btn-primary w-100">
