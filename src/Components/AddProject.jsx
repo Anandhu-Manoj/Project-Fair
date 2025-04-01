@@ -4,6 +4,7 @@ import Button from "react-bootstrap/Button";
 
 import Modal from "react-bootstrap/Modal";
 import uploadimage from "../assets/uploadIMG.jpg";
+import { addProject } from "../../services/allApis";
 
 const AddProject = () => {
   const [show, setShow] = useState(false);
@@ -24,9 +25,7 @@ const AddProject = () => {
     projectWebsiteLink: "",
   });
 
-
-  
-  const onBtnClick = () => {
+  const onBtnClick = async () => {
     if (
       projectData.projectGitLink &&
       projectData.projectImg &&
@@ -34,15 +33,40 @@ const AddProject = () => {
       projectData.projectOverview &&
       projectData.projectTitle &&
       projectData.projectWebsiteLink
-    ) {const payload=new FormData()
+    ) {
+      const payload = new FormData();
 
-      payload.append("projectImg",projectData.projectImg)
-      payload.append("projectTitle",projectData.projectTitle)
-      payload.append("projectLanguage",projectData.projectLanguage)
-      payload.append("projectOverview",projectData.projectOverview)
-      payload.append("projectGitLink",projectData.projectGitLink)
-      payload.append("projectWebsiteLink",projectData.projectWebsiteLink)
-    }else{'please fill the form correctly'}
+      payload.append("projectImg", projectData.projectImg);
+      payload.append("projectTitle", projectData.projectTitle);
+      payload.append("projectLanguage", projectData.projectLanguage);
+      payload.append("projectOverview", projectData.projectOverview);
+      payload.append("projectGitLink", projectData.projectGitLink);
+      payload.append("projectWebsiteLink", projectData.projectWebsiteLink);
+
+      if (sessionStorage.getItem("token")) {
+        let requestHeader = {
+          Authorization: `Bearer ${sessionStorage.getItem("token")}`,
+          "Content-Type": "multipart/form-data",
+        };
+        try {
+          console.log(requestHeader);
+          let apiResponse = await addProject(payload, requestHeader);
+          if (apiResponse.status == 201) {
+            alert("succesfully created");
+            handleClose();
+          } else {
+            alert(apiResponse.data);
+          }
+          
+        } catch (err) {
+          alert(err);
+        }
+      } else {
+        alert("token missing");
+      }
+    } else {
+      ("please fill the form correctly");
+    }
   };
   //showing image
   useEffect(() => {

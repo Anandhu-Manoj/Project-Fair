@@ -19,7 +19,6 @@ const Header = ({ insideDashBoard }) => {
               Logout <i className="fa-solid fa-right-from-bracket"></i>
             </button>
           )}
-          
         </Container>
       </Navbar>
     </div>

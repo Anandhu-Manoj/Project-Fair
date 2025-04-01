@@ -19,10 +19,24 @@ const Profile = () => {
             <div className="d-flex flex-column align-items-center shadow p-2 ">
               <label>
                 <input style={{ display: "none" }} type="file" />
-                <img height={"200px"} width={'200px'} className="img-fluid rounded-circle" src={propic} alt="" />
+                <img
+                  height={"200px"}
+                  width={"200px"}
+                  className="img-fluid rounded-circle"
+                  src={propic}
+                  alt=""
+                />
               </label>
-              <input className="form-control mt-2" type="text" placeholder="user GitHub Link" />
-              <input className="form-control mt-2" type="text" placeholder="user linkdin Link" />
+              <input
+                className="form-control mt-2"
+                type="text"
+                placeholder="user GitHub Link"
+              />
+              <input
+                className="form-control mt-2"
+                type="text"
+                placeholder="user linkdin Link"
+              />
               <button className="btn btn-warning w-100 mt-2">update</button>
             </div>
           </div>

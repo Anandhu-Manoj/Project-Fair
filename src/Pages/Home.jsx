@@ -3,24 +3,39 @@ import { Link, useNavigate } from "react-router-dom";
 import landingImage from "../assets/landingIMG.jpg";
 import ProjectCard from "../Components/ProjectCard";
 import Card from "react-bootstrap/Card";
+import { getHomeProjectData } from "../../services/allApis";
 
 const Home = () => {
-  const [isLoggedin,setIsLoggedin]=useState(false)
-  const navigate=useNavigate()
+  const [isLoggedin, setIsLoggedin] = useState(false);
+  const navigate = useNavigate();
+  const [projectData, setProjectData] = useState([]);
 
-  useEffect(
-    ()=>{
-      if(sessionStorage.getItem('token')){
-        setIsLoggedin(true)
-    }else{
-      setIsLoggedin(false)
+  useEffect(() => {
+    if (sessionStorage.getItem("token")) {
+      setIsLoggedin(true);
+    } else {
+      setIsLoggedin(false);
+    }
+  }, [isLoggedin]);
+  useEffect(() => {
+    getHomeProjects()
+  },[]);
+  const onProjectClick = () => {
+    isLoggedin ? navigate("/projects") : alert("please login to see projects");
+  };
 
-    }},[isLoggedin]
-  )
- const onProjectClick=()=>{
-  isLoggedin?navigate('/projects'):alert('please login to see projects')
- }
-
+  const getHomeProjects = async () => {
+    try {
+      let apiResponse = await getHomeProjectData();
+      if (apiResponse.status == 200) {
+        setProjectData(apiResponse.data);
+      } else {
+        console.log('error')
+      }
+    } catch (err) {
+      alert(err);
+    }
+  };
 
   return (
     <>
@@ -40,11 +55,15 @@ const Home = () => {
                 porro laboriosam. Iste aspernatur possimus ipsa dolores ducimus
                 facere maiores illum maxime beatae sint.
               </p>
-              {isLoggedin?<Link className="btn btn-warning" to={"/dashboard"}>
-                Start to explore
-              </Link>:<Link className="btn btn-danger" to={"/dashboard"}>
-                Login/Register
-              </Link>}
+              {isLoggedin ? (
+                <Link className="btn btn-warning" to={"/dashboard"}>
+                  Start to explore
+                </Link>
+              ) : (
+                <Link className="btn btn-danger" to={"/dashboard"}>
+                  Login/Register
+                </Link>
+              )}
             </div>
             <div className="col-lg-6">
               <img className="img-fluid" src={landingImage} alt="" />
@@ -56,9 +75,11 @@ const Home = () => {
         <h1 className="mt-5">Explore Our Project</h1>
         <marquee behavior="" direction="">
           <div className="d-flex">
-            <div className="me-5">
-              <ProjectCard />
-            </div>
+            {projectData?.map((projects, index) => (
+              <div key={index} className="me-5">
+                <ProjectCard project={projects} />
+              </div>
+            ))}
           </div>
         </marquee>
         <button onClick={onProjectClick} className="btn btn-link mt-5">
@@ -93,7 +114,6 @@ const Home = () => {
               </Card.Text>
               <Card.Text>
                 Lorem ipsum dolor sit amet consectetur, adipisicing elit.
-                
               </Card.Text>
             </Card.Body>
           </Card>

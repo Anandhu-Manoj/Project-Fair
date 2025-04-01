@@ -1,11 +1,13 @@
 import React, { useState } from "react";
 import { Card } from "react-bootstrap";
 import Modal from "react-bootstrap/Modal";
+import baseUrl from "../../services/baseUrl.JS";
 
-const ProjectCard = () => {
+const ProjectCard = ({project}) => {
   const [show, setShow] = useState(false);
 
   const handleClose = () => setShow(false);
+  console.log(project)
   const handleShow = () => setShow(true);
 
   return (
@@ -14,16 +16,16 @@ const ProjectCard = () => {
         <Card.Img
           height={"200px"}
           variant="top"
-          src="https://cdn.pixabay.com/photo/2021/12/29/02/10/idea-6900632_640.png"
+          src={`${baseUrl}/uploads/${project.projectImg}`}
         />
 
         <Card.Body>
-          <Card.Title>project</Card.Title>
+          <Card.Title>{project.projectTitle}</Card.Title>
         </Card.Body>
       </Card>
       <Modal size="lg" centered show={show} onHide={handleClose}>
         <Modal.Header closeButton>
-          <Modal.Title>Project Details!</Modal.Title>
+          <Modal.Title>{project.projectTitle}</Modal.Title>
         </Modal.Header>
         <Modal.Body>
           {" "}
@@ -32,7 +34,7 @@ const ProjectCard = () => {
               {" "}
               <img
                 className="img-fluid"
-                src="https://cdn.pixabay.com/photo/2021/12/29/02/10/idea-6900632_640.png"
+                src={`${baseUrl}/uploads/${project.projectImg}`}
                 alt=""
               />
             </div>
@@ -51,8 +53,19 @@ const ProjectCard = () => {
             </div>
           </div>
           <div className="float-start mt-3">
-            <a className="btn btn-secondary" href="https://github.com/Anandhu-Manoj/Media-player.git"> <i className="fa-brands fa-github"></i></a>
-            <a  className="btn btn-secondary ms-2" href="https://github.com/Anandhu-Manoj/Media-player.git"><i className="fa-solid fa-link"></i></a>
+            <a
+              className="btn btn-secondary"
+              href="https://github.com/Anandhu-Manoj/Media-player.git"
+            >
+              {" "}
+              <i className="fa-brands fa-github"></i>
+            </a>
+            <a
+              className="btn btn-secondary ms-2"
+              href="https://github.com/Anandhu-Manoj/Media-player.git"
+            >
+              <i className="fa-solid fa-link"></i>
+            </a>
           </div>
         </Modal.Body>
       </Modal>
