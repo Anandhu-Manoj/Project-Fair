@@ -13,3 +13,13 @@ return await commonApi('post','/addProject',reqbody,reqHeader)
 export const getHomeProjectData=async()=>{
 return await commonApi('get','/homeProjects',"")
 }
+
+
+export const getAllProjects=async(reqHeader)=>{
+return await commonApi('get','/getAllProjects',"",reqHeader)
+}
+
+export const getuserSpeceficProjects=async(reqHeader)=>{
+return await commonApi('get','/speceficProjects',"",reqHeader)
+}
+

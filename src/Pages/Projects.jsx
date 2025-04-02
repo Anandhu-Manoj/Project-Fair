@@ -1,13 +1,37 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import Header from "../Components/Header";
 import { Row, Col } from "react-bootstrap";
 import ProjectCard from "../Components/ProjectCard";
+import { getAllProjects } from "../../services/allApis";
 
 const Projects = () => {
+  useEffect(() => {
+    getProjects();
+  }, []);
+  const [projectData, setProjectData] = useState([]);
+
+  const getProjects = async () => {
+    if (sessionStorage.getItem("token")) {
+      try {
+        let reqHeader = {
+          Authorization: `Bearer ${sessionStorage.getItem("token")}`,
+        };
+        let apiResponse = await getAllProjects(reqHeader);
+        if (apiResponse.status == 200) {
+          setProjectData(apiResponse.data);
+        } else {
+          alert(apiResponse.data);
+        }
+      } catch (error) {
+        alert(error);
+      }
+    }
+  };
+
   return (
     <div>
       <Header />
-      <div  style={{paddingTop:"80px"}} className="container-fluid ">
+      <div style={{ paddingTop: "80px" }} className="container-fluid ">
         <div className="d-flex justify-content-between">
           <h1>All Projects</h1>
           <input
@@ -16,11 +40,13 @@ const Projects = () => {
             type="text"
           />
         </div>
-        <div>
+        <div className="mt-4">
           <Row>
-            <Col sm={12} md={6} lg={4}>
-              <ProjectCard />
-            </Col>
+            {projectData?.map((eachProject, index) => (
+              <Col key={index} sm={12} md={6} lg={4}>
+                <ProjectCard project={eachProject} />
+              </Col>
+            ))}
           </Row>
         </div>
       </div>

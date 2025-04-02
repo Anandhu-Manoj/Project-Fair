@@ -45,7 +45,7 @@ const AddProject = () => {
 
       if (sessionStorage.getItem("token")) {
         let requestHeader = {
-          Authorization: `Bearer ${sessionStorage.getItem("token")}`,
+          "Authorization": `Bearer ${sessionStorage.getItem("token")}`,
           "Content-Type": "multipart/form-data",
         };
         try {

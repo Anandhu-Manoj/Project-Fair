@@ -47,8 +47,7 @@ const ProjectCard = ({project}) => {
               <p style={{ textAlign: "justify" }}>
                 {" "}
                 <span className="fw-bolder">Project overview :</span>
-                Lorem ipsum, dolor sit amet consectetur adipisicing elit. Soluta
-                voluptatibus minima impedit perferendis cumque. Dolores
+                {project.projectOverview}
               </p>
             </div>
           </div>
