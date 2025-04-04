@@ -1,11 +1,14 @@
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import AddProject from "../Components/AddProject";
 import EditProject from "../Components/EditProject";
 import { getuserSpeceficProjects } from "../../services/allApis";
+import { addProjectContext } from "../contexts/ProjectContext";
+
 
 const ViewProject = () => {
 
   const [projectdata,setProjectData]=useState([])
+  const [addProjectResponse,SetAddProjectResponse]=useContext(addProjectContext)
 
   const getuserProjects=async()=>{
     if(sessionStorage.getItem("token")){
@@ -31,7 +34,7 @@ const ViewProject = () => {
   console.log(projectdata)
   useEffect(()=>{
     getuserProjects()
-  },[])
+  },[addProjectResponse])
 
   
   return (

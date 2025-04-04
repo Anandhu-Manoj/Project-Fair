@@ -5,9 +5,11 @@ import ProjectCard from "../Components/ProjectCard";
 import { getAllProjects } from "../../services/allApis";
 
 const Projects = () => {
+  const [searchKey, setSearchkey] = useState("");
+
   useEffect(() => {
     getProjects();
-  }, []);
+  }, [searchKey]);
   const [projectData, setProjectData] = useState([]);
 
   const getProjects = async () => {
@@ -16,7 +18,7 @@ const Projects = () => {
         let reqHeader = {
           Authorization: `Bearer ${sessionStorage.getItem("token")}`,
         };
-        let apiResponse = await getAllProjects(reqHeader);
+        let apiResponse = await getAllProjects(reqHeader,searchKey);
         if (apiResponse.status == 200) {
           setProjectData(apiResponse.data);
         } else {
@@ -35,6 +37,7 @@ const Projects = () => {
         <div className="d-flex justify-content-between">
           <h1>All Projects</h1>
           <input
+            onChange={(e) => setSearchkey(e.target.value)}
             className="form-control w-25 me-3"
             placeholder="search projects by language"
             type="text"

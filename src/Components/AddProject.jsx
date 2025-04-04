@@ -1,13 +1,18 @@
-import React, { useEffect } from "react";
+import React, { useContext, useEffect } from "react";
 import { useState } from "react";
 import Button from "react-bootstrap/Button";
 
 import Modal from "react-bootstrap/Modal";
 import uploadimage from "../assets/uploadIMG.jpg";
 import { addProject } from "../../services/allApis";
+import { addProjectContext } from "../contexts/ProjectContext";
+
+
 
 const AddProject = () => {
   const [show, setShow] = useState(false);
+
+  const[addProjectResponse,SetAddProjectResponse]=useContext(addProjectContext)
 
   const handleClose = () => {
     clearContent();
@@ -52,6 +57,7 @@ const AddProject = () => {
           console.log(requestHeader);
           let apiResponse = await addProject(payload, requestHeader);
           if (apiResponse.status == 201) {
+            SetAddProjectResponse(apiResponse.data)
             alert("succesfully created");
             handleClose();
           } else {
