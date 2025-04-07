@@ -22,4 +22,13 @@ return await commonApi('get',`/getAllProjects?search=${searchKey}`,"",reqHeader)
 export const getuserSpeceficProjects=async(reqHeader)=>{
 return await commonApi('get','/speceficProjects',"",reqHeader)
 }
+export const updateProjects=async(id,reqBody,reqHeader)=>{
+return await commonApi('put',`/project/${id}/update`,reqBody,reqHeader)
+}
+
+
+//delete
+export const deleteProject=async(id,reqHeader)=>{
+ return await commonApi('delete',`/project/${id}/delete`,{},reqHeader)
+}
 

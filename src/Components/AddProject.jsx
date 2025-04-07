@@ -7,12 +7,11 @@ import uploadimage from "../assets/uploadIMG.jpg";
 import { addProject } from "../../services/allApis";
 import { addProjectContext } from "../contexts/ProjectContext";
 
-
-
 const AddProject = () => {
   const [show, setShow] = useState(false);
 
-  const[addProjectResponse,SetAddProjectResponse]=useContext(addProjectContext)
+  const { addProjectResponse, SetAddProjectResponse } =
+    useContext(addProjectContext);
 
   const handleClose = () => {
     clearContent();
@@ -50,7 +49,7 @@ const AddProject = () => {
 
       if (sessionStorage.getItem("token")) {
         let requestHeader = {
-          "Authorization": `Bearer ${sessionStorage.getItem("token")}`,
+          Authorization: `Bearer ${sessionStorage.getItem("token")}`,
           "Content-Type": "multipart/form-data",
         };
         try {
@@ -63,7 +62,6 @@ const AddProject = () => {
           } else {
             alert(apiResponse.data);
           }
-          
         } catch (err) {
           alert(err);
         }

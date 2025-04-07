@@ -9,11 +9,9 @@ import ProjectContext from "./contexts/ProjectContext.jsx";
 createRoot(document.getElementById("root")).render(
   <StrictMode>
     <BrowserRouter>
-    <ProjectContext>
+      <ProjectContext>
         <App />
-        </ProjectContext>
-        
-     
+      </ProjectContext>
     </BrowserRouter>
   </StrictMode>
 );
