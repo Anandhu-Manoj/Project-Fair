@@ -8,8 +8,7 @@ import {
 } from "../contexts/ProjectContext";
 
 const ViewProject = () => {
-
-  const [deleteProjectResp,setDeleteProjectResp]=useState([])
+  const [deleteProjectResp, setDeleteProjectResp] = useState([]);
   const [projectdata, setProjectData] = useState([]);
   const { addProjectResponse, SetAddProjectResponse } =
     useContext(addProjectContext);
@@ -40,7 +39,7 @@ const ViewProject = () => {
   console.log(projectdata);
   useEffect(() => {
     getuserProjects();
-  }, [addProjectResponse, editProjectResponse,deleteProjectResp]);
+  }, [addProjectResponse, editProjectResponse, deleteProjectResp]);
 
   const onDeleteClick = async (id) => {
     if (sessionStorage.getItem("token")) {
@@ -50,15 +49,15 @@ const ViewProject = () => {
       try {
         let apiResponse = await deleteProject(id, reqHeader);
         console.log(apiResponse);
-        if(apiResponse.status==200){
-          setDeleteProjectResp(apiResponse.data)
-
-        }else{alert('error occured')}
+        if (apiResponse.status == 200) {
+          setDeleteProjectResp(apiResponse.data);
+        } else {
+          alert("error occured");
+        }
       } catch (error) {
         console.log(error);
       }
     }
-   
   };
 
   return (

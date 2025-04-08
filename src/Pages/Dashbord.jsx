@@ -15,7 +15,7 @@ const Dashbord = () => {
         
       </div> */}
       <div className="row">
-        <div className="col-lg-8"><h1>Welcome  <span className='text-warning'>User,</span></h1><ViewProject/></div>
+        <div className="col-lg-8"><h1>Welcome  <span className='text-warning'>{sessionStorage.getItem('user')?sessionStorage.getItem('user'):"user"},</span></h1><ViewProject/></div>
         <div className="col-lg-4"><Profile/></div>
       </div>
     </div>
