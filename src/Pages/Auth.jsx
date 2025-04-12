@@ -1,14 +1,14 @@
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import { Col, Row } from "react-bootstrap";
 import Login from "../assets/Login.svg";
 import FloatingLabel from "react-bootstrap/FloatingLabel";
 import Form from "react-bootstrap/Form";
 import { Link, useNavigate } from "react-router-dom";
 import { loginUser, registeruser } from "../../services/allApis";
-
-//de structuring to pass the prompt
+import { LoginContext } from "../contexts/AuthhContext"; // Corrected the context name
 
 const Auth = ({ fromRegisterPage }) => {
+  const { isLoggedIn, setIsLoggedIn } = useContext(LoginContext); // Corrected the context name
   const navigate = useNavigate();
   const [data, setData] = useState({ username: "", password: "", email: "" });
 
@@ -20,16 +20,16 @@ const Auth = ({ fromRegisterPage }) => {
         if (username && password && email) {
           let responseData = await registeruser(data);
 
-          if (responseData.status == 201) {
-            alert("user succesfully created");
+          if (responseData.status === 201) {
+            alert("User successfully created");
           } else {
-            if (responseData.status == 409) {
-              alert("user already exist please login");
-              navigate('/login')
+            if (responseData.status === 409) {
+              alert("User already exists, please login");
+              navigate("/login");
             }
           }
         } else {
-          alert("please fill the form");
+          alert("Please fill the form");
         }
       } catch (err) {
         console.log(err);
@@ -41,22 +41,22 @@ const Auth = ({ fromRegisterPage }) => {
           password: data.password,
         };
         let apiResponse = await loginUser(payload);
-        if (apiResponse?.status == 200) {
-          console.log(apiResponse);
-
+        if (apiResponse?.status === 200) {
           sessionStorage.setItem("user", apiResponse?.data?.user.username);
           sessionStorage.setItem("token", apiResponse?.data?.token);
+          setIsLoggedIn(true);
           navigate("/dashboard");
-        } else if (apiResponse?.status == 401) {
+        } else if (apiResponse?.status === 401) {
           alert(apiResponse?.message);
         } else {
-          alert("internal server error contact admin");
+          alert("Internal server error, contact admin");
         }
       } else {
-        alert("please fill the form completely");
+        alert("Please fill the form completely");
       }
     }
   };
+
   return (
     <div
       style={{ minHeight: "100vh" }}
@@ -69,9 +69,9 @@ const Auth = ({ fromRegisterPage }) => {
           </Col>
           <Col>
             <h1 className="mt-3">
-              <i className="fa-brands fa-docker"></i> project Fair
+              <i className="fa-brands fa-docker"></i> Project Fair
             </h1>
-            <h5>sign {fromRegisterPage ? "up" : "In"} to your account</h5>
+            <h5>Sign {fromRegisterPage ? "Up" : "In"} to your account</h5>
 
             <Form className="mt-3">
               {fromRegisterPage ? (

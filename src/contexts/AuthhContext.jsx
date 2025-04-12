@@ -1,27 +1,23 @@
-import React, {  useState } from 'react'
-import { createContext } from 'react'
+import React, { useEffect, useState, createContext } from "react";
 
-export const AuthContext=createContext()
-const AuthhContext = ({children}) => {
-  
+export const LoginContext = createContext();
 
-  const[isLoggedIn,setIsLoggedin]=useState([])
+const AuthContext = ({ children }) => {
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
 
+  useEffect(() => {
+    if (sessionStorage.getItem("token")) {
+      setIsLoggedIn(true);
+    } else {
+      setIsLoggedIn(false);
+    }
+  }, []); // Removed `isLoggedIn` from dependencies
 
-  
   return (
-    <div>
- <AuthContext.provider value={{isLoggedIn,setIsLoggedin}}>
-  {children}
+    <LoginContext.Provider value={{ isLoggedIn, setIsLoggedIn }}>
+      {children}
+    </LoginContext.Provider>
+  );
+};
 
-</AuthContext.provider>
-
-    </div>
-    
-
-    
-
-  )
-}
-
-export default AuthhContext
+export default AuthContext;

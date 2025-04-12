@@ -10,12 +10,11 @@ import AuthhContext from "./contexts/AuthhContext.jsx";
 createRoot(document.getElementById("root")).render(
   <StrictMode>
     <BrowserRouter>
-      <ProjectContext>
-        <AuthhContext>
-        <App />
-        </AuthhContext>     
-      </ProjectContext>
-      
+      <AuthhContext>
+        <ProjectContext>
+          <App />
+        </ProjectContext>
+      </AuthhContext>
     </BrowserRouter>
   </StrictMode>
 );

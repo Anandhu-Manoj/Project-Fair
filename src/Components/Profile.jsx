@@ -5,19 +5,26 @@ import { getProfileDetails, updateusers } from "../../services/allApis";
 
 const Profile = () => {
   const [editResult, setEditResult] = useState([]);
-
   const [userData, setUserData] = useState({});
+  const [open, setOpen] = useState(false);
+  const [data, setData] = useState({
+    gitlink: "",
+    linkdinlink: "",
+    proimage: "",
+  });
+
   useEffect(() => {
     getUserData();
   }, [editResult]);
 
-  // useEffect(() => {
-  //   setData({
-  //     gitlink: userData.gitlink || "",
-  //     linkdinlink: userData.linkdinlink || "",
-  //     proimage: userData.proimage || "",
-  //   });
-  // }, [userData]);
+  useEffect(() => {
+    // Update `data` whenever `userData` changes
+    setData({
+      gitlink: userData.gitlink || "",
+      linkdinlink: userData.linkdinlink || "",
+      proimage: userData.proimage || "",
+    });
+  }, [userData]);
 
   const getUserData = async () => {
     if (sessionStorage.getItem("token")) {
@@ -26,21 +33,19 @@ const Profile = () => {
       };
       try {
         let apiResponse = await getProfileDetails(profileHeader);
-        setUserData(apiResponse.data);
+        if (apiResponse.status === 200) {
+          setUserData(apiResponse.data);
+        } else {
+          alert("Failed to fetch user details");
+        }
       } catch (error) {
-        alert(error);
+        alert("Error fetching user details: " + error.message);
       }
     } else {
-      alert("please login");
+      alert("Please login");
     }
   };
 
-  const [open, setOpen] = useState(false);
-  const [data, setData] = useState({
-    gitlink: userData.gitlink,
-    linkdinlink: userData.linkdinlink,
-    proimage: userData.proimage
-  });
   const updateProfileChanges = async () => {
     if (sessionStorage.getItem("token")) {
       if (data.gitlink && data.linkdinlink && data.proimage) {
@@ -53,33 +58,37 @@ const Profile = () => {
         payLoad.append("linkdinlink", data.linkdinlink);
         payLoad.append("proimage", data.proimage);
 
-        let apiResponse = await updateusers(payLoad, reqHeader);
-        if (apiResponse.status == 200) {
-          setEditResult(apiResponse.data);
-          alert("succesfully updated");
-        } else {
-          alert("error occured");
+        try {
+          let apiResponse = await updateusers(payLoad, reqHeader);
+          if (apiResponse.status === 200) {
+            setEditResult(apiResponse.data);
+            alert("Successfully updated");
+          } else {
+            alert("Error occurred while updating profile");
+          }
+        } catch (error) {
+          alert("Error updating profile: " + error.message);
         }
       } else {
-        alert("please fill the form");
+        alert("Please fill out the form completely");
       }
     } else {
-      alert("please login");
+      alert("Please login");
     }
   };
+
   return (
     <>
       <div className="d-flex flex-column w-100 text-center ms-5">
-        <div className="d-flex  justify-content-evenly ">
-          <h3 className=" mt-2 text-warning">Profile </h3>
+        <div className="d-flex justify-content-evenly">
+          <h3 className="mt-2 text-warning">Profile</h3>
           <button onClick={() => setOpen(!open)} className="btn me-4">
-            {" "}
-            <i className=" fa-solid fa-angle-down text-warning"></i>
+            <i className="fa-solid fa-angle-down text-warning"></i>
           </button>
         </div>
         <Collapse in={open} className="w-75 text-center">
           <div id="example-collapse-text">
-            <div className="d-flex flex-column align-items-center shadow p-2 ">
+            <div className="d-flex flex-column align-items-center shadow p-2">
               <label>
                 <input
                   onChange={(e) => {
@@ -92,15 +101,15 @@ const Profile = () => {
                   height={"200px"}
                   width={"200px"}
                   className="img-fluid rounded-circle"
-                  src={propic}
-                  alt=""
+                  src={data.proimage || propic}
+                  alt="Profile"
                 />
               </label>
               <input
                 onChange={(e) => setData({ ...data, gitlink: e.target.value })}
                 className="form-control mt-2"
                 type="text"
-                placeholder="user GitHub Link"
+                placeholder="User GitHub Link"
                 value={data.gitlink}
               />
               <input
@@ -109,15 +118,14 @@ const Profile = () => {
                 }
                 className="form-control mt-2"
                 type="text"
-                placeholder="user linkdin Link"
+                placeholder="User LinkedIn Link"
                 value={data.linkdinlink}
-
               />
               <button
                 className="btn btn-warning w-100 mt-2"
                 onClick={updateProfileChanges}
               >
-                update
+                Update
               </button>
             </div>
           </div>
